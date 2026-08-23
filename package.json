@@ -1,0 +1,16 @@
+{
+  "name": "pathguard-mcp-cloudflare",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Cloudflare Workers and Containers deployment for PathGuard MCP",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "dependencies": {
+    "@cloudflare/containers": "^0.3.7"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}
