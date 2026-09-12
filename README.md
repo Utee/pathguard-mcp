@@ -2,6 +2,10 @@
 
 PathGuard MCP lets MCP-compatible AI agents check crypto transactions for scams and mistakes directly in conversation. It supports local MCP clients such as Claude Desktop, Claude Code, Gemini CLI, Grok CLI, Cursor, and Codex, plus remote Streamable HTTP deployments.
 
+[![MCP Registry](https://img.shields.io/badge/MCP%20Registry-org.cieltech.pathguard%2Fpathguard-blue)](https://registry.modelcontextprotocol.io/v0.1/servers?search=org.cieltech.pathguard/pathguard)
+
+> Listed on the [official MCP Registry](https://registry.modelcontextprotocol.io/v0.1/servers?search=org.cieltech.pathguard/pathguard) as `org.cieltech.pathguard/pathguard`.
+
 The MCP server is a thin wrapper around the authenticated PathGuard API. Your PathGuard API key remains the credential used by the server and should never be exposed to an AI client or committed to source control.
 
 ## Install
@@ -174,7 +178,7 @@ Use Grok's custom connector flow and provide your public `https://.../mcp` endpo
 | Tool | What it does |
 |---|---|
 | `check_transaction` | Scan a single transaction for scam addresses, clipboard-hijack patterns, and typo mistakes |
-| `check_transactions_batch` | Scan up to 100 transactions in one call |
+| `check_transactions_batch` | Scan up to 1,000 transactions in one call |
 | `report_scam_address` | Flag an address as a scam (community reporting) |
 | `get_usage_status` | Check your current plan, quota, and usage this month |
 
