@@ -13,7 +13,7 @@ The production MCP server is a thin, authenticated interface to PathGuard's tran
 Remote Streamable HTTP endpoint:
 
 ```
-https://pathguard-v2.up.railway.app/mcp/
+https://api.pathguard.cieltech.org/mcp/
 ```
 
 Remote clients use OAuth to connect an existing PathGuard account. During authorization, PathGuard verifies the user's existing API key. The API key is not exposed to the AI client or returned through MCP.
@@ -108,7 +108,7 @@ For remote clients, use the production OAuth-protected Streamable HTTP endpoint 
 In a ChatGPT workspace with Developer Mode enabled, create a custom MCP app and provide:
 
 ```text
-https://pathguard-v2.up.railway.app/mcp/
+https://api.pathguard.cieltech.org/mcp/
 ```
 
 Choose OAuth authentication. ChatGPT will use the PathGuard authorization flow to connect an existing PathGuard account.
@@ -167,3 +167,9 @@ Use `detail_level="full"` when individual results are required.
 See the [PathGuard API documentation](https://pathguard.cieltech.org/docs) for endpoint schemas, rate limits, pricing, and risk-flag information.
 
 PathGuard MCP: https://pathguard.cieltech.org/mcp
+
+## Moving existing connections to the custom domain
+
+Remote OAuth clients previously connected to the Railway address must create a new connection using `https://api.pathguard.cieltech.org/mcp/` and authorize again with their existing PathGuard API key. The old Railway endpoint is in maintenance; imported OAuth records do not automatically update a client's saved server URL or issuer.
+
+For local stdio clients, update your checkout (`git pull` and `python -m pip install .`) or explicitly set `PATHGUARD_API_BASE=https://api.pathguard.cieltech.org` alongside `PATHGUARD_API_KEY`, then restart the MCP client. Existing API keys remain valid.

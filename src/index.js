@@ -7,7 +7,7 @@ export class PathGuardContainer extends Container {
   sleepAfter = "10m";
   envVars = {
     PATHGUARD_API_KEY: env.PATHGUARD_API_KEY,
-    PATHGUARD_API_BASE: env.PATHGUARD_API_BASE || "https://pathguard-v2.up.railway.app",
+    PATHGUARD_API_BASE: env.PATHGUARD_API_BASE || "https://api.pathguard.cieltech.org",
     PATHGUARD_MCP_ALLOWED_HOSTS: env.PATHGUARD_MCP_ALLOWED_HOSTS,
   };
 }

@@ -7,7 +7,7 @@ from mcp.server.mcpserver import MCPServer
 from mcp.server.streamable_http import TransportSecuritySettings
 
 API_KEY = os.environ.get("PATHGUARD_API_KEY", "")
-API_BASE = os.environ.get("PATHGUARD_API_BASE", "https://pathguard-v2.up.railway.app")
+API_BASE = os.environ.get("PATHGUARD_API_BASE", "https://api.pathguard.cieltech.org")
 
 server = MCPServer("pathguard", version="0.1.0")
 
