@@ -173,3 +173,16 @@ PathGuard MCP: https://pathguard.cieltech.org/mcp
 Remote OAuth clients previously connected to the Railway address must create a new connection using `https://api.pathguard.cieltech.org/mcp/` and authorize again with their existing PathGuard API key. The old Railway endpoint is in maintenance; imported OAuth records do not automatically update a client's saved server URL or issuer.
 
 For local stdio clients, update your checkout (`git pull` and `python -m pip install .`) or explicitly set `PATHGUARD_API_BASE=https://api.pathguard.cieltech.org` alongside `PATHGUARD_API_KEY`, then restart the MCP client. Existing API keys remain valid.
+
+
+## Optional token and deposit details
+
+Existing tool names are unchanged. `check_transaction` and each `check_transactions_batch` item accept an optional `transfer` object:
+
+```json
+{"address":"TAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA","chain":"TRON","transfer":{"token":"USDC","token_kind":"token","network":"TRON","destination_type":"exchange","exchange":"Kraken"}}
+```
+
+Exact networks: ETHEREUM, BASE, ARBITRUM, OPTIMISM, BSC, POLYGON, BITCOIN, SOLANA, TRON, XRPL, STELLAR. The address family remains EVM/BTC/SOL/TRON/XRP/XLM. Optional transfer fields include token_contract, recipient_network, memo and memo_required. Use native only for an actual native coin, not a wrapped token. The response includes compatibility reasons and official-source review dates where available. Initial exchange rules cover select Kraken requirements; unverified combinations and personal wallet acceptance remain Unknown—confirm with the recipient. OFAC screening covers EVM/BTC/SOL/TRON only. Token identity, memo account ownership and live deposit availability are not verified.
+
+Update your GitHub-installed package and restart your MCP client to refresh its tool schemas. This source update does not publish a package release. The hosted OAuth MCP at https://api.pathguard.cieltech.org/mcp/ also extends its existing preflight_transaction tool with the same transfer object. Existing address-only calls still work.

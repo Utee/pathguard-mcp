@@ -1,15 +1,36 @@
 import argparse
 import os
-from typing import Optional
+from typing import Optional, Literal
+from pydantic import BaseModel, Field
 
 import httpx
 from mcp.server.mcpserver import MCPServer
 from mcp.server.streamable_http import TransportSecuritySettings
 
+class TransferDetails(BaseModel):
+    token: str = Field(min_length=1,max_length=64)
+    token_kind: Literal['native','token'] = 'token'
+    network: Literal['ETHEREUM','BASE','ARBITRUM','OPTIMISM','BSC','POLYGON','BITCOIN','SOLANA','TRON','XRPL','STELLAR']
+    destination_type: Literal['personal_wallet','exchange']
+    exchange: str | None = Field(default=None,max_length=80)
+    token_contract: str | None = Field(default=None,max_length=128)
+    memo: str | None = Field(default=None,max_length=256)
+    memo_required: bool | None = None
+    recipient_network: str | None = Field(default=None,max_length=32)
+
+
+class BatchItem(BaseModel):
+    address: str
+    chain: str = "EVM"
+    amount: float | None = None
+    raw_amount_input: str | None = None
+    transfer: TransferDetails | None = None
+
+
 API_KEY = os.environ.get("PATHGUARD_API_KEY", "")
 API_BASE = os.environ.get("PATHGUARD_API_BASE", "https://api.pathguard.cieltech.org")
 
-server = MCPServer("pathguard", version="0.1.0")
+server = MCPServer("pathguard", version="0.2.0")
 
 
 async def _call_api(method: str, path: str, json_body: Optional[dict] = None) -> dict:
@@ -44,19 +65,20 @@ async def check_transaction(
     address: str,
     chain: str = "EVM",
     amount: Optional[float] = None,
+    transfer: TransferDetails | None = None,
 ) -> dict:
-    """Check one crypto transaction for scams, address mistakes, and other risk signals."""
+    """Analyze one transaction. Optional transfer details check token/network/deposit requirements. Unknown does not mean safe. Never sends funds."""
     return await _call_api(
         "POST",
         "/v1/check",
-        {"address": address, "chain": chain, "amount": amount},
+        {"address": address, "chain": chain, "amount": amount, "transfer": transfer.model_dump() if transfer else None},
     )
 
 
 @server.tool()
-async def check_transactions_batch(items: list[dict]) -> dict:
-    """Check up to 100 crypto transactions in one request."""
-    return await _call_api("POST", "/v1/check-batch", {"items": items})
+async def check_transactions_batch(items: list[BatchItem]) -> dict:
+    """Check up to 1,000 crypto transactions. Each item accepts optional transfer details; unknown means confirm with the recipient."""
+    return await _call_api("POST", "/v1/check-batch", {"items": [item.model_dump() for item in items]})
 
 
 @server.tool()
